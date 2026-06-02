@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import CosmeticCreateModal from "../../components/modals/CosmeticCreateModal";
 
 const categories = ["すべて", "リップ", "アイシャドウ", "チーク"];
 
@@ -43,12 +44,31 @@ export default function HomePage() {
   const router = useRouter();
   const [selectedCategory, setSelectedCategory] = useState("すべて");
   const [cosmetics, setCosmetics] = useState<Cosmetic[]>([]);
+  const [showModal, setShowModal] = useState(false);
+
+  const fetchCosmetics = () => {
+  const token = localStorage.getItem("token");
+  if (!token) return;
+  fetch("http://localhost:8000/cosmetics/", {
+    headers: { Authorization: `Bearer ${token}` },
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      if (Array.isArray(data)) {
+        setCosmetics(data);
+      }
+    })
+    .catch((e) => console.error(e));
+};
+
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
       router.push("/");
+      return;
     }
+    fetchCosmetics();
   }, [router]);
 
   const filtered = cosmetics.filter((c) => {
@@ -85,9 +105,7 @@ export default function HomePage() {
             fontSize: "13px",
             fontWeight: "500",
             color: "#212121"
-          }}>
-            Kanon
-          </span>
+          }}>Kanon</span>
           <div style={{
             width: "36px",
             height: "36px",
@@ -95,8 +113,7 @@ export default function HomePage() {
             backgroundColor: "#f5c0d7",
             display: "flex",
             alignItems: "center",
-            justifyContent: "center"
-          }}>
+            justifyContent: "center" }}>
             <span style={{
               fontSize: "16px",
               fontWeight: "bold",
@@ -106,7 +123,10 @@ export default function HomePage() {
       </div>
 
       {/* カテゴリタブ */}
-      <div style={{ display: "flex", gap: "8px", padding: "12px 20px" }}>
+      <div style={{
+        display: "flex",
+        gap: "8px",
+        padding: "12px 20px" }}>
         {categories.map((cat) => (
           <button
             key={cat}
@@ -133,15 +153,13 @@ export default function HomePage() {
         flex: 1,
         padding: "0 20px",
         overflowY: "auto",
-        paddingBottom: "80px"
-      }}>
+        paddingBottom: "80px" }}>
         {filtered.length === 0 ? (
           <div style={{
             textAlign: "center",
             marginTop: "60px",
             color: "#999",
-            fontSize: "14px"
-          }}>
+            fontSize: "14px" }}>
             <p>コスメが登録されていません</p>
             <p>右下の＋ボタンから追加してください</p>
           </div>
@@ -182,9 +200,7 @@ export default function HomePage() {
                 }}>
                   {cosmetic.brand}
                 </p>
-                <div style={{
-                  display: "flex",
-                  gap: "8px" }}>
+                <div style={{ display: "flex", gap: "8px" }}>
                   <span style={{
                     height: "28px",
                     padding: "0 10px",
@@ -220,7 +236,7 @@ export default function HomePage() {
 
       {/* 追加ボタン */}
       <button
-        onClick={() => alert("コスメ登録モーダルを開く（後で実装）")}
+        onClick={() => setShowModal(true)}
         style={{
           position: "fixed",
           bottom: "68px",
@@ -236,10 +252,19 @@ export default function HomePage() {
           cursor: "pointer",
           display: "flex",
           alignItems: "center",
-          justifyContent: "center" }}
+          justifyContent: "center"
+        }}
       >
         +
       </button>
+
+      {/* コスメ登録モーダル */}
+      {showModal && (
+        <CosmeticCreateModal
+          onClose={() => setShowModal(false)}
+          onCreated={fetchCosmetics}
+        />
+      )}
 
       {/* ナビバー */}
       <div style={{
@@ -253,12 +278,16 @@ export default function HomePage() {
         borderTop: "1px solid #d9d9d9",
         display: "flex",
         alignItems: "center",
-        justifyContent: "space-around" }}>
-        {[{ icon: "⊟", label: "ホーム", path: "/home" },
-        { icon: "◎", label: "傾向", path: "/trends" },
-        { icon: "◈", label: "試着", path: "/try-on" },
-        { icon: "◉", label: "設定", path: "/personal" }].map((item) => (
-          <button key={item.label} onClick={() => router.push(item.path)} style={{
+        justifyContent: "space-around"
+      }}>
+        {[
+          { icon: "⊟", label: "ホーム", path: "/home" },
+          { icon: "◎", label: "傾向", path: "/trends" },
+          { icon: "◈", label: "試着", path: "/try-on" },
+          { icon: "◉", label: "設定", path: "/personal" },
+        ].map((item) => (
+          <button key={item.label} onClick={() => router.push(item.path)}
+          style={{
             background: "none",
             border: "none",
             cursor: "pointer",
