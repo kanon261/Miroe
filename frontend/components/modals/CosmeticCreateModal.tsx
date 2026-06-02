@@ -1,13 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 
 type Props = {
   onClose: () => void;
   onCreated: () => void;
 };
 
-export default function CosmeticCreateModal({ onClose, onCreated }: Props) {
+export default function CosmeticCreateModal({ onClose, onCreated }: Props): React.ReactElement {
   const [name, setName] = useState("");
   const [brand, setBrand] = useState("");
   const [category, setCategory] = useState("lip");
@@ -24,7 +24,7 @@ export default function CosmeticCreateModal({ onClose, onCreated }: Props) {
     }
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:8000/cosmetics/", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/cosmetics/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

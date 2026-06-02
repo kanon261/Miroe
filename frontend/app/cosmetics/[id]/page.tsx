@@ -46,7 +46,7 @@ export default function CosmeticDetailPage() {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) { router.push("/"); return; }
-    fetch(`http://localhost:8000/cosmetics/${id}`, {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/cosmetics/${id}`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
@@ -64,7 +64,7 @@ export default function CosmeticDetailPage() {
 
 const handleDelete = async () => {
   const token = localStorage.getItem("token");
-  const res = await fetch(`http://localhost:8000/cosmetics/${id}`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/cosmetics/${id}`, {
     method: "DELETE",
     headers: { Authorization: `Bearer ${token}` },
   });
@@ -75,7 +75,7 @@ const handleDelete = async () => {
 
   const handleEdit = async () => {
     const token = localStorage.getItem("token");
-    const res = await fetch(`http://localhost:8000/cosmetics/${id}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/cosmetics/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

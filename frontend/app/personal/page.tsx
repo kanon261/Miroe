@@ -38,7 +38,7 @@ useEffect(() => {
   const token = localStorage.getItem("token");
   if (!token) { router.push("/"); return; }
 
-  fetch("http://localhost:8000/personal/", {
+  fetch(`${process.env.NEXT_PUBLIC_API_URL}/personal/`, {
     headers: { Authorization: `Bearer ${token}` },
   })
     .then((res) => {
@@ -62,7 +62,7 @@ useEffect(() => {
 
 const handleSave = async () => {
   const token = localStorage.getItem("token");
-  const res = await fetch("http://localhost:8000/personal/", {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/personal/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

@@ -49,7 +49,7 @@ export default function HomePage() {
   const fetchCosmetics = () => {
   const token = localStorage.getItem("token");
   if (!token) return;
-  fetch("http://localhost:8000/cosmetics/", {
+  fetch(`${process.env.NEXT_PUBLIC_API_URL}/cosmetics/`, {
     headers: { Authorization: `Bearer ${token}` },
   })
     .then((res) => res.json())
