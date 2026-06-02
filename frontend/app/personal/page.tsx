@@ -38,7 +38,7 @@ useEffect(() => {
   const token = localStorage.getItem("token");
   if (!token) { router.push("/"); return; }
 
-  fetch(`${process.env.NEXT_PUBLIC_API_URL}/personal/`, {
+  fetch(`https://miroe-backend.onrender.com/personal/`, {
     headers: { Authorization: `Bearer ${token}` },
   })
     .then((res) => {
@@ -62,7 +62,7 @@ useEffect(() => {
 
 const handleSave = async () => {
   const token = localStorage.getItem("token");
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/personal/`, {
+  const res = await fetch(`https://miroe-backend.onrender.com/personal/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

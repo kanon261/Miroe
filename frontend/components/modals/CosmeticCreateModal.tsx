@@ -24,7 +24,7 @@ export default function CosmeticCreateModal({ onClose, onCreated }: Props): Reac
     }
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/cosmetics/`, {
+      const res = await fetch(`https://miroe-backend.onrender.com/cosmetics/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

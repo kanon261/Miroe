@@ -49,7 +49,7 @@ export default function HomePage() {
   const fetchCosmetics = () => {
   const token = localStorage.getItem("token");
   if (!token) return;
-  fetch(`${process.env.NEXT_PUBLIC_API_URL}/cosmetics/`, {
+  fetch(`https://miroe-backend.onrender.com/cosmetics/`, {
     headers: { Authorization: `Bearer ${token}` },
   })
     .then((res) => res.json())
